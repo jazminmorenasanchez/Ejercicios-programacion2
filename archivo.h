@@ -1,18 +1,21 @@
+#ifndef ARCHIVO_H
+#define ARCHIVO_H
+
 #include <fstream>
 #include "deposito.h"
-using namespace std;
-class archivo {
-    private:
-    ofstream archivoSalida;
-    ifstream archivoEntrada;
 
-    public:
+class archivo {
+private:
+    std::ofstream archivoSalida;
+    std::ifstream archivoEntrada;
+
+public:
     archivo();
     ~archivo();
 
-    void grabarDeposito(deposito dispo_, deposito pi_);
+    void grabarRetiro(int cantidad, int precio);
     void leerDeposito();
     void cerrarArchivo();
-    void porcentaje();
-    void dinero();
 };
+
+#endif // ARCHIVO_H

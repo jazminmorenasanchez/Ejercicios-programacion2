@@ -1,30 +1,39 @@
-#include<iostream>
+#include <iostream>
 #include "deposito.h"
 using namespace std;
 
-void deposito::setdispo(int dispo_){
-    dispo=dispo_;
-}
-void deposito::setpi(int pi_){
-    pi=pi_;
-}
-void deposito::setpr(int pr_){
-    pr=pr_;
-}
-void deposito::setdi(int di_){
-    di=di_;
+deposito::deposito() : dispo(0), ocupacion(0), dineroRecaudado(0) {}
+
+void deposito::setdispo(int dispo_) {
+    dispo = dispo_;
 }
 
-int deposito::getdispo(){
-    return dispo;
-}
-int deposito::getpi(){
-    return pi;
-}
-int deposito::getpr(){
-    return pr;
-}
-int deposito::getdi(){
-    return di;
+void deposito::ingresarPaquetes(int cantidad) {
+    if (ocupacion + cantidad <= dispo) {
+        ocupacion += cantidad;
+    } else {
+        throw runtime_error("No hay suficiente espacio en el depósito.");
+    }
 }
 
+bool deposito::retirarPaquetes(int cantidad, int precio) {
+    if (cantidad <= ocupacion) {
+        ocupacion -= cantidad;
+        dineroRecaudado += cantidad * precio;
+        return true;
+    } else {
+        throw runtime_error("No hay suficientes paquetes para retirar.");
+    }
+}
+
+double deposito::obtenerPorcentajeOcupacion() const {
+    return (static_cast<double>(ocupacion) / dispo) * 100;
+}
+
+int deposito::getDineroRecaudado() const {
+    return dineroRecaudado;
+}
+
+int deposito::getCapacidadDisponible() const {
+    return dispo - ocupacion;
+}

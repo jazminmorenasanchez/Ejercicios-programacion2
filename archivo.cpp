@@ -1,5 +1,4 @@
-#include <fstream>
-#include "deposito.h"
+#include <iostream>
 #include "archivo.h"
 using namespace std;
 
@@ -16,6 +15,10 @@ archivo::archivo() {
     }
 }
 
+archivo::~archivo() {
+    cerrarArchivo();
+}
+
 void archivo::cerrarArchivo() {
     if (archivoSalida.is_open()) {
         archivoSalida.close();
@@ -25,42 +28,24 @@ void archivo::cerrarArchivo() {
     }
 }
 
-archivo::~archivo() {
-    cerrarArchivo();
-}
-
-void archivo::grabarDeposito(deposito dispo_, deposito pi_) {
+void archivo::grabarRetiro(int cantidad, int precio) {
     try {
-        for (int i = 0; i < 1; ++i) {
-            archivoSalida << "Dispociocion TOTAL deposito: " << dispo_.getdispo() << "\n";
-            archivoSalida << "Ingreso: " << pi_.getpi() << "\n";
-        }
+        archivoSalida << "Retiro: " << cantidad << " paquetes, Total: " << cantidad * precio << "\n";
         archivoSalida.flush();
     } catch (const exception &e) {
         cerr << "Error al escribir en el archivo: " << e.what() << endl;
     }
 }
 
-void archivo::leerDeposito(){
+void archivo::leerDeposito() {
     try {
-    string linea;
-    int dispo, pi;
-
-    while (getline(archivoEntrada, linea)) {
-        if (linea.find("Dispociocion TOTAL deposito:") != string::npos) {
-            sscanf(linea.c_str(), "Dispociocion TOTAL deposito: %d", &dispo);
-
-            getline(archivoEntrada, linea);
-            sscanf(linea.c_str(), "Ingreso: %d", &pi);
-
-            // Crear y mostrar la estructura con los números extraídos
-            cout << "Dispociocion TOTAL deposito: " << dispo << "\n";
-            cout << "Ingreso: " << pi << "\n";
+        string linea;
+        while (getline(archivoEntrada, linea)) {
+            cout << linea << "\n";
         }
+        archivoEntrada.clear(); // Limpia errores al finalizar la lectura
+        archivoEntrada.seekg(0, ios::beg); // Reinicia el puntero de lectura al principio del archivo
+    } catch (const exception &e) {
+        cerr << "Error al leer el archivo: " << e.what() << endl;
     }
-    archivoEntrada.clear(); // Limpia errores al finalizar la lectura
-} catch (const exception &e) {
-    cerr << "Error al leer el archivo: " << e.what() << endl;
-}
-
 }
